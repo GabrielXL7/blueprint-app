@@ -61,6 +61,7 @@ describe("Abas (F10)", () => {
     );
     expect(screen.getAllByRole("tab").map((aba) => aba.props.accessibilityLabel)).toEqual([
       "Hoje",
+      "Agenda",
       "Calendário",
       "Histórico",
       "Perfil",

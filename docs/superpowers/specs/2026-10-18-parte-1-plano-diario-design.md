@@ -1,5 +1,7 @@
 # Parte 1: Plano diário (design)
 
+> **Substituída em 2026-11-15** por `2026-11-15-agenda-semanal-design.md`. A agenda semanal passa a ser o núcleo do planejamento, e lembretes e conquistas foram absorvidos pelas etapas 3 e 6 do novo documento. Mantida apenas como registro.
+
 **Data:** 2026-10-18
 **Situação:** aprovado em conversa; aguarda revisão desta especificação
 **Branch:** `feat/parte-1-plano` (a partir de `develop`, estado da Etapa 6)

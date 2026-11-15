@@ -4,7 +4,7 @@
  * A formatação é manual para não depender do suporte a Intl de cada motor JS.
  */
 
-const DIAS_DA_SEMANA = [
+export const DIAS_DA_SEMANA = [
   "Domingo",
   "Segunda-feira",
   "Terça-feira",

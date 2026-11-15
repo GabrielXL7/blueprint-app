@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from "react-native";
-import Animated, { ReduceMotion, ZoomIn } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import {
   DIAS_ABREVIADOS,
   chaveDoDia,
@@ -10,8 +10,7 @@ import {
 import { nivelDeIntensidade } from "../domain/estatisticas";
 import { plural } from "../domain/texto";
 import { useTheme } from "../theme/ThemeProvider";
-import { MOTION } from "../styles/theme";
-import { CURVA } from "../ui/motion";
+import { entradaDeCelula } from "../ui/motion";
 import { Text } from "../ui/Text";
 
 type CalendarioMensalProps = {
@@ -22,15 +21,6 @@ type CalendarioMensalProps = {
   selecionado: Date;
   aoSelecionar: (dia: Date) => void;
 };
-
-function entradaCelula(coluna: number, linha: number) {
-  const atraso = 100 + coluna * 35 + linha * 20;
-  return ZoomIn.duration(MOTION.cells.duration)
-    .delay(atraso)
-    .easing(CURVA)
-    .withInitialValues({ transform: [{ scale: MOTION.cells.fromScale }] })
-    .reduceMotion(ReduceMotion.System);
-}
 
 /** Grade mensal com barra de intensidade por dia (docs/03 tela 6; docs/05 F11). */
 export default function CalendarioMensal({
@@ -73,7 +63,7 @@ export default function CalendarioMensal({
               return (
                 <Animated.View
                   key={chave}
-                  entering={entradaCelula(coluna, linha)}
+                  entering={entradaDeCelula(100 + coluna * 35 + linha * 20)}
                   style={styles.celula}
                 >
                   <Pressable

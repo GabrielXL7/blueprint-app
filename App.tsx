@@ -14,17 +14,26 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { repositorios, type Preferencias } from "./src/data";
 import { PREFERENCIAS_PADRAO } from "./src/data/PreferenciasRepository";
 import type { Acao } from "./src/domain/acoes";
+import { carregarAgendaSegura } from "./src/data/AgendaRepository";
+import type { DadosAgenda } from "./src/domain/agenda";
 import { AcoesProvider } from "./src/hooks/useAcoes";
-import Abas from "./src/navigation/Abas";
+import { AgendaProvider } from "./src/hooks/useAgenda";
+import Raiz from "./src/navigation/Raiz";
 import { ThemeProvider, useTheme, type Destaque, type ThemeMode } from "./src/theme/ThemeProvider";
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   // A splash já pode ter sido escondida (ex.: recarga rápida); não há o que fazer.
 });
 
-type DadosIniciais = { preferencias: Preferencias; acoes: Acao[] };
+type DadosIniciais = {
+  preferencias: Preferencias;
+  acoes: Acao[];
+  agenda: DadosAgenda;
+  /** false quando a leitura da agenda falhou: não regravar por cima do que está no disco */
+  agendaGravavel: boolean;
+};
 
-/** Lê preferências e ações do aparelho. Falhas viram valores padrão: o app sempre abre. */
+/** Lê preferências, ações e agenda do aparelho. Falhas viram valores padrão: o app sempre abre. */
 function useDadosIniciais(): DadosIniciais | null {
   const [dados, setDados] = useState<DadosIniciais | null>(null);
 
@@ -39,9 +48,10 @@ function useDadosIniciais(): DadosIniciais | null {
         console.warn("Falha ao ler ações salvas; começando vazio.", erro);
         return [] as Acao[];
       }),
-    ]).then(([preferencias, acoes]) => {
+      carregarAgendaSegura(repositorios.agenda),
+    ]).then(([preferencias, acoes, { dados: agenda, gravar }]) => {
       if (ativo) {
-        setDados({ preferencias, acoes });
+        setDados({ preferencias, acoes, agenda, agendaGravavel: gravar });
       }
     });
     return () => {
@@ -66,7 +76,7 @@ function Root() {
 
   return (
     <NavigationContainer theme={temaNavegacao}>
-      <Abas />
+      <Raiz />
       <StatusBar style={scheme === "dark" ? "light" : "dark"} />
     </NavigationContainer>
   );
@@ -114,7 +124,12 @@ export default function App() {
         aoMudar={salvarPreferencias}
       >
         <AcoesProvider acoesIniciais={dados.acoes} meta={meta} repositorio={repositorios.acoes}>
-          <Root />
+          <AgendaProvider
+            agendaInicial={dados.agenda}
+            repositorio={dados.agendaGravavel ? repositorios.agenda : undefined}
+          >
+            <Root />
+          </AgendaProvider>
         </AcoesProvider>
       </ThemeProvider>
     </SafeAreaProvider>

@@ -84,6 +84,23 @@ Os arquivos `docs/assets/blueprint_mvp_screens.jpg` e `docs/figma/blueprint_ui_k
 - **Aparência:** `Claro | Escuro | Automático` e cor de destaque (Gradiente, Laranja, Índigo).
 - **Conta:** fuso horário e provedor de login.
 
+### 📱 Tela 9: Agenda (sem prancha no canvas)
+- **Cabeçalho:** "Agenda", o nome da agenda da semana e o botão **Editar** (abre Agendas).
+- **Semana:** setas para a semana anterior e a próxima (sem limite) e o intervalo, por exemplo "15 a 21 de novembro".
+- **Cartão por dia, de domingo a sábado:** título ("Seg 16", com selo **Hoje**), uma linha por compromisso (ícone da atividade, nome, horário "05:00 a 06:00" ou só "20:00", detalhe, "só neste dia" para avulso e "Conflito de horário"), "Nada marcado" quando vazio e **+ Adicionar**.
+- **Sem agenda cadastrada:** cartão "Montar a agenda de {mês}" e "Começar em branco".
+
+### 📱 Tela 10: Compromisso (sem prancha no canvas)
+- **Repetição** (só ao criar): `Toda semana | Só neste dia`.
+- **Atividade:** busca, lista agrupada por categoria e "Nova atividade" (nome, ícone e categoria opcional).
+- **Dias da semana** (toda semana) ou **Data** (só neste dia), **Início**, **Término** ou "Sem horário de término", **Detalhe** e **Avisar antes (minutos)**.
+- Em agenda em curso, salvar e remover perguntam **A partir de hoje** ou **O período todo**. Remover pede confirmação.
+
+### 📱 Tela 11: Agendas (sem prancha no canvas)
+- Lista de períodos com nome, datas e quantidade de compromissos.
+- Por agenda: **Duplicar para o próximo mês**, **Editar período** e **Remover**.
+- **Nova agenda** abre o formulário com o mês atual preenchido.
+
 ---
 
 ## 3. Como exportar imagens das telas para este repositório
