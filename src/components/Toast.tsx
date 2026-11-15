@@ -33,8 +33,8 @@ export default function Toast({
 
   return (
     <Animated.View
-      entering={toastEntrada}
-      exiting={toastSaida}
+      entering={toastEntrada()}
+      exiting={toastSaida()}
       accessibilityLiveRegion="polite"
       style={[styles.toast, { backgroundColor: colors.ink, boxShadow: shadows.glow }]}
     >
