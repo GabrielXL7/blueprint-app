@@ -6,16 +6,17 @@ import { RADIUS, SIZES, SPACING } from "../styles/theme";
 import { Icon, type IconName } from "../ui/Icon";
 import { Text } from "../ui/Text";
 
-export type RotaDaAba = "Hoje" | "Calendario" | "Historico" | "Perfil";
+export type RotaDaAba = "Hoje" | "Agenda" | "Calendario" | "Historico" | "Perfil";
 
 const ABAS: Record<RotaDaAba, { rotulo: string; icone: IconName }> = {
   Hoje: { rotulo: "Hoje", icone: "hoje" },
+  Agenda: { rotulo: "Agenda", icone: "agenda" },
   Calendario: { rotulo: "Calendário", icone: "calendario" },
   Historico: { rotulo: "Histórico", icone: "historico" },
   Perfil: { rotulo: "Perfil", icone: "perfil" },
 };
 
-/** Barra inferior de 4 abas (docs/03; aba ativa invertida, 56 de altura). */
+/** Barra inferior de 5 abas (docs/03; aba ativa invertida, 56 de altura). */
 export default function BarraDeAbas({ state, navigation }: BottomTabBarProps) {
   const { colors, shadows } = useTheme();
   const insets = useSafeAreaInsets();

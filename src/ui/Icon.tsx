@@ -13,6 +13,7 @@ export type IconName =
   | "mais"
   | "check"
   | "hoje"
+  | "agenda"
   | "calendario"
   | "historico"
   | "perfil"
@@ -81,6 +82,15 @@ function desenho(name: IconName, color: string): ReactNode {
         <>
           <Circle cx="12" cy="12" r="10" />
           <Path d="m9 12 2 2 4-4" />
+        </>
+      );
+    case "agenda":
+      return (
+        <>
+          <Path d="M9 6h11M9 12h11M9 18h11" />
+          <Circle cx="4.5" cy="6" r="1.2" fill={color} />
+          <Circle cx="4.5" cy="12" r="1.2" fill={color} />
+          <Circle cx="4.5" cy="18" r="1.2" fill={color} />
         </>
       );
     case "calendario":
