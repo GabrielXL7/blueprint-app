@@ -12,7 +12,7 @@ Lista das funções do **Blueprint**, com a situação real de cada uma e o crit
 
 ## 1. Funcionalidades
 
-| ID | Função | Tela | Situação | Fase |
+| ID | Função | Tela | Situação | Fase (A1 a A4: etapas da agenda) |
 | :-: | :--- | :--- | :--- | :-: |
 | F01 | Selecionar uma entre 5 categorias (Hidratação, Exercício, Descanso, Estudo, Outro) | Home | 🟡 Parcial: seleção única com `useState` e `BotaoOpcao` | 2 |
 | F02 | Registrar ação da categoria selecionada com 1 toque | Home | 🟡 Parcial: incrementa o contador, mas não valida a categoria (veja a seção 3) | 2 |
@@ -23,7 +23,7 @@ Lista das funções do **Blueprint**, com a situação real de cada uma e o crit
 | F07 | Toast de confirmação com **Desfazer** | Home | 🧪 Desenhado | 2 |
 | F08 | Tema claro, escuro e automático | Home e Perfil | 🎨 Desenhado (`THEMES` existe em `theme.js`, mas nenhuma tela o consome) | 2 |
 | F09 | Animações suaves e suporte a "reduzir movimento" | Todas | 🎨 Desenhado | 2 |
-| F10 | Navegação por 4 abas | Todas | 🎨 Desenhado | 3 |
+| F10 | Navegação por 5 abas (Hoje, Agenda, Calendário, Histórico, Perfil) | Todas | ✅ Implementado (agenda, etapa 1) | 3 |
 | F11 | Calendário mensal com intensidade por dia | Calendário | 🎨 Desenhado | 3 |
 | F12 | Resumo do dia selecionado e do mês | Calendário | 🎨 Desenhado | 3 |
 | F13 | Histórico semanal em gráfico | Histórico | 🎨 Desenhado | 3 |
@@ -38,6 +38,16 @@ Lista das funções do **Blueprint**, com a situação real de cada uma e o crit
 | F22 | Persistir ações no Supabase | Todas | 🟡 Tabela criada, app não integrado | 4 |
 | F23 | Cache offline com sincronização (`AsyncStorage`) | Todas | 🎨 Planejado | 4 |
 | F24 | Gerar `.apk` com EAS | n/a | 🟡 `eas.json` pronto, build não executado | 4 |
+| F25 | Ver a agenda da semana, de domingo a sábado, com navegação entre semanas | Agenda | ✅ Implementado (agenda, etapa 1) | A1 |
+| F26 | Criar, editar e remover compromisso recorrente (dias da semana, início, fim opcional, detalhe, aviso antes) | Compromisso | ✅ Implementado (agenda, etapa 1) | A1 |
+| F27 | Compromisso avulso de um único dia (o espaço livre "+ Adicionar" do caderno) | Agenda e Compromisso | ✅ Implementado (agenda, etapa 1) | A1 |
+| F28 | Agendas por período (por exemplo novembro), criar, editar datas, remover e duplicar para o mês seguinte | Agendas | ✅ Implementado (agenda, etapa 1) | A1 |
+| F29 | Editar ou remover "a partir de hoje" numa agenda em curso, sem alterar os dias passados | Compromisso | ✅ Implementado (agenda, etapa 1) | A1 |
+| F30 | Catálogo de atividades com categoria opcional (Academia, Corrida em Exercício) | Compromisso | ✅ Implementado (agenda, etapa 1) | A1 |
+| F31 | Agenda salva no aparelho, versionada, com dado corrompido guardado à parte | Todas | ✅ Implementado (agenda, etapa 1) | A1 |
+| F32 | Registrar "Feito" e "Não fui" em cada compromisso, com Desfazer; "Feito" gera a ação da categoria | Agenda e Hoje | 🎨 Planejado | A2 |
+| F33 | Alertas locais: despertar, antecedência por compromisso, botão "Feito" na notificação | Todas | 🎨 Planejado | A3 |
+| F34 | Painel de histórico por categoria, atividade e mês, com comparação entre meses | Histórico | 🎨 Planejado | A4 |
 
 ---
 
@@ -95,6 +105,23 @@ Lista das funções do **Blueprint**, com a situação real de cada uma e o crit
 - [ ] E-mail inválido mostra erro junto ao campo.
 - [ ] O fuso horário é detectado automaticamente (por exemplo com `Intl.DateTimeFormat().resolvedOptions().timeZone`; valide no motor Hermes da versão do Expo usada).
 - [ ] Erros de rede mostram mensagem clara e mantêm o que a pessoa digitou.
+
+### F25 a F31: agenda semanal (etapa 1)
+- [ ] A aba Agenda mostra a semana de hoje, de domingo a sábado, com o dia de hoje destacado e o intervalo (por exemplo "15 a 21 de novembro").
+- [ ] As setas navegam entre semanas, inclusive para o futuro, sem limite.
+- [ ] Cada dia lista os compromissos em ordem de horário, mostra "Nada marcado" quando vazio e tem o botão "+ Adicionar".
+- [ ] Horários que se sobrepõem no mesmo dia mostram "Conflito de horário"; compromissos que apenas se encostam não.
+- [ ] Criar "Toda semana" entra na agenda do período e aparece em todos os dias marcados; "Só neste dia" cria um avulso com a marca "só neste dia" e não altera a agenda.
+- [ ] Início é obrigatório; término vazio ou "Sem horário de término" cria evento pontual; término antes ou igual ao início é recusado com a mensagem junto ao botão Salvar.
+- [ ] Sem agenda para a data, a tela avisa "Crie uma agenda para este período antes" e leva a Agendas.
+- [ ] Editar, criar ou remover um compromisso recorrente numa agenda em curso pergunta "A partir de hoje" ou "O período todo", com aviso de que o segundo muda os dias já passados. "A partir de hoje" não altera nenhum dia anterior.
+- [ ] Em agenda que ainda não começou, salvar não pergunta o escopo.
+- [ ] Remover pede confirmação.
+- [ ] Atividade com nome repetido (sem diferenciar maiúsculas) é recusada; atividade em uso por compromisso não pode ser removida.
+- [ ] "Duplicar para o próximo mês" cria o mês de calendário inteiro seguinte, mantém as mesmas atividades e é bloqueado quando o período já tem agenda.
+- [ ] Duas agendas nunca se sobrepõem em datas.
+- [ ] Fechar o app por completo e reabrir mantém atividades, agendas e avulsos.
+- [ ] Dado ilegível no aparelho não derruba o app: a agenda abre vazia e o conteúdo é guardado à parte.
 
 ---
 
