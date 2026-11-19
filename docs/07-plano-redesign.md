@@ -99,11 +99,19 @@ Para rodar a página: abrir `landing/index.html` no navegador, ou servir a pasta
 - Alertas, painel de histórico por mês, Supabase e o `.apk`.
 - Preço e link real de download: não existem no projeto, então a página usa um único ponto de configuração para o link.
 
-## 6. Montar semana (cronograma mais rápido)
+## 6. Agenda: montar a semana
 
-Problema: montar a semana exigia abrir o mesmo formulário comprido uma vez por dia, embora o dado já aceite vários dias por compromisso.
+Problema: montar a semana exigia abrir o mesmo formulário comprido uma vez por dia, embora o dado já aceite vários dias por compromisso. A visão "Por dia" foi removida.
 
-- **Agenda, modo "Montar semana":** uma linha por compromisso, ordenada por horário, com os sete dias ao lado. Um toque liga ou desliga o dia, sem formulário. Tocar no nome abre o compromisso para editar horário e detalhes.
+- **Agenda:** um mês por vez (navegação por mês). Cada compromisso é uma linha, ordenada por horário, com os sete dias ao lado. Um toque liga ou desliga o dia, sem formulário. Tocar no nome abre o compromisso para editar horário e detalhes.
 - **Agenda em curso:** a mudança vale a partir de hoje (a agenda é dividida), para não reescrever os dias que já passaram. Em agenda que ainda não começou, vale para todas as semanas.
-- **Formulário:** atalhos "Seg a sex", "Fim de semana" e "Todos os dias". Vindo da semana modelo, o formulário abre sem dia pré-marcado.
-- **Fora desta entrega:** duplicar um compromisso (por exemplo, a mesma aula em dois horários) e arrastar para mudar de dia.
+- **Conflito de horário** aparece dentro da linha do compromisso, e os compromissos "só neste dia" ganharam a seção "Só em um dia" no fim do mês.
+- **Formulário:** atalhos "Seg a sex", "Fim de semana" e "Todos os dias". Vindo da Agenda, abre sem dia pré-marcado.
+- **Fora desta entrega:** duplicar um compromisso (a mesma aula em dois horários) e arrastar para mudar de dia.
+
+## 7. Histórico
+
+Problema: a lista mostrava cada ação de cada dia (mais de cem linhas) e a visão Mês era um aviso de "não especificado".
+
+- **Semana:** gráfico e números como antes, mais "Dia a dia": uma linha por dia da semana exibida, com os ícones das categorias e o total. Tocar abre as ações do dia; hoje já vem aberto. Dias futuros não aparecem.
+- **Mês:** ações no mês e dias com registro, e "Por categoria" com barra proporcional e a comparação com o mês anterior ("2 a mais que no mês anterior"). Responde "quantas vezes fui à academia neste mês".

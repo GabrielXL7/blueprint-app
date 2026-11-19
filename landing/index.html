@@ -73,48 +73,47 @@
         </div>
 
         <div class="hero__tela revelar" style="--i: 2">
-          <div class="phone" role="img" aria-label="Tela Agenda do Blueprint mostrando os compromissos de quinta-feira, dia 19">
+          <div class="phone" role="img" aria-label="Tela Agenda do Blueprint com os compromissos do mês e os dias da semana marcados em cada um">
             <div class="tela">
               <div class="ui tema-claro" aria-hidden="true">
                 <div class="ui__corpo">
                   <div class="ui__cab">
-                    <div>
-                      <div class="ui__h1">Agenda</div>
-                      <div class="ui__sub">Novembro de 2026</div>
-                    </div>
+                    <div class="ui__h1">Agenda</div>
                     <span class="ui__chip">Editar</span>
                   </div>
                   <div class="ui__semana">
                     <svg class="i"><use href="#i-chev" /></svg>
-                    <span>15 a 21 de novembro</span>
+                    <span>novembro de 2026</span>
                     <svg class="i"><use href="#i-chev" /></svg>
                   </div>
+                  <div class="ui__nota">Toque nos dias para marcar ou desmarcar. Vale para todas as semanas desta agenda.</div>
                   <div class="ui__cartao">
-                    <div class="ui__dia">Qui 19 <span class="ui__hoje">Hoje</span></div>
                     <div class="ui__linha">
                       <span class="ui__ic"><svg class="i"><use href="#i-sol" /></svg></span>
                       <div><b>Acordar</b><small>04:30</small></div>
                     </div>
+                    <div class="ui__dias"><span class="on">dom</span><span class="on">seg</span><span class="on">ter</span><span class="on">qua</span><span class="on">qui</span><span class="on">sex</span><span class="on">sáb</span></div>
+                  </div>
+                  <div class="ui__cartao">
                     <div class="ui__linha">
                       <span class="ui__ic"><svg class="i"><use href="#i-hal" /></svg></span>
                       <div><b>Academia</b><small>05:00 a 06:00</small></div>
                     </div>
+                    <div class="ui__dias"><span>dom</span><span class="on">seg</span><span class="on">ter</span><span class="on">qua</span><span class="on">qui</span><span class="on">sex</span><span>sáb</span></div>
+                  </div>
+                  <div class="ui__cartao">
+                    <div class="ui__linha">
+                      <span class="ui__ic"><svg class="i"><use href="#i-livro" /></svg></span>
+                      <div><b>Aula</b><small>07:30</small></div>
+                    </div>
+                    <div class="ui__dias"><span>dom</span><span class="on">seg</span><span class="on">ter</span><span>qua</span><span>qui</span><span>sex</span><span>sáb</span></div>
+                  </div>
+                  <div class="ui__cartao">
                     <div class="ui__linha">
                       <span class="ui__ic"><svg class="i"><use href="#i-pontos" /></svg></span>
                       <div><b>Trabalho</b><small>12:00 a 18:00</small></div>
                     </div>
-                    <div class="ui__linha">
-                      <span class="ui__ic"><svg class="i"><use href="#i-pontos" /></svg></span>
-                      <div><b>Casa</b><small>20:00</small></div>
-                    </div>
-                    <div class="ui__add">+ Adicionar</div>
-                  </div>
-                  <div class="ui__cartao">
-                    <div class="ui__dia">Sex 20</div>
-                    <div class="ui__linha">
-                      <span class="ui__ic"><svg class="i"><use href="#i-sol" /></svg></span>
-                      <div><b>Acordar</b><small>04:30</small></div>
-                    </div>
+                    <div class="ui__dias"><span>dom</span><span class="on">seg</span><span class="on">ter</span><span>qua</span><span class="on">qui</span><span>sex</span><span>sáb</span></div>
                   </div>
                 </div>
                 <div class="ui__abas">
@@ -271,7 +270,7 @@
             <ul class="lista revelar" style="--i: 3">
               <li>
                 <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check" /></svg>
-                <span><strong>Semana e mês.</strong> Alterne entre a visão curta e a visão geral.</span>
+                <span><strong>Semana e mês.</strong> Um dia por linha na semana; no mês, quantas vezes cada categoria apareceu.</span>
               </li>
               <li>
                 <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check" /></svg>
@@ -285,7 +284,7 @@
           </div>
 
           <div class="vitrine__tela revelar" style="--i: 2">
-            <div class="phone" role="img" aria-label="Tela Histórico do Blueprint no tema escuro com o gráfico da semana: 28 ações, 7 dias seguidos, melhor dia quarta">
+            <div class="phone" role="img" aria-label="Tela Histórico do Blueprint no tema escuro com o gráfico da semana e uma linha por dia">
               <div class="tela">
                 <div class="ui tema-escuro" aria-hidden="true">
                   <div class="ui__corpo">
@@ -312,10 +311,18 @@
                       <div><strong>7</strong><span>dias seguidos</span></div>
                       <div><strong>qua</strong><span>melhor dia</span></div>
                     </div>
-                    <div class="ui__lista-h">Hoje <span>3 ações</span></div>
-                    <div class="ui__linha">
-                      <span class="ui__ic"><svg class="i"><use href="#i-gota" /></svg></span>
-                      <div><b>Hidratação</b><small>14:20</small></div>
+                    <div class="ui__lista-h">Dia a dia</div>
+                    <div class="ui__cartao ui__resumo-dias">
+                      <div class="ui__rdia">
+                        <div><b>Hoje</b><small>17 de outubro</small></div>
+                        <span class="ui__mini"><svg class="i"><use href="#i-gota" /></svg><svg class="i"><use href="#i-hal" /></svg></span>
+                        <strong>3 ações</strong>
+                      </div>
+                      <div class="ui__rdia">
+                        <div><b>Ontem</b><small>16 de outubro</small></div>
+                        <span class="ui__mini"><svg class="i"><use href="#i-livro" /></svg><svg class="i"><use href="#i-gota" /></svg><svg class="i"><use href="#i-lua" /></svg></span>
+                        <strong>5 ações</strong>
+                      </div>
                     </div>
                   </div>
                   <div class="ui__abas">

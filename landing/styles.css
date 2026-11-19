@@ -1227,3 +1227,81 @@ h3 {
   font-size: 0.8125em;
   color: var(--p-mute);
 }
+
+/* Agenda: semana modelo */
+
+.ui__nota {
+  font-size: 0.8125em;
+  color: var(--p-mute);
+  line-height: 1.4;
+}
+
+.ui__dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.375em;
+  margin-top: 0.7em;
+}
+
+.ui__dias span {
+  height: 2.5em;
+  border-radius: 0.9em;
+  display: grid;
+  place-items: center;
+  background: var(--p-sunk);
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.ui__dias span.on {
+  background: var(--p-ink);
+  color: var(--p-bg);
+}
+
+/* Histórico: dia a dia */
+
+.ui__resumo-dias {
+  padding: 0 1em;
+}
+
+.ui__rdia {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.8em 0;
+}
+
+.ui__rdia + .ui__rdia {
+  border-top: 1px solid var(--p-hair);
+}
+
+.ui__rdia > div {
+  flex: 1;
+}
+
+.ui__rdia b {
+  display: block;
+  font-weight: 500;
+}
+
+.ui__rdia small {
+  display: block;
+  font-size: 0.75em;
+  color: var(--p-mute);
+}
+
+.ui__rdia strong {
+  font-size: 0.875em;
+  font-weight: 600;
+}
+
+.ui__mini {
+  display: flex;
+  gap: 0.4em;
+  color: var(--p-mute);
+}
+
+.ui__mini svg.i {
+  width: 1.1em;
+  height: 1.1em;
+}

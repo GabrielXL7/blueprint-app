@@ -2,10 +2,14 @@ import { useMemo, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import {
   agendaEmCurso,
+  compromissosEmConflito,
+  dataDaChave,
   type Agenda,
+  type Avulso,
   type Compromisso,
   type DiaDaSemana,
 } from "../domain/agenda";
+import { formatarDataCabecalho } from "../domain/datas";
 import { useAgenda } from "../hooks/useAgenda";
 import { SIZES, SPACING } from "../styles/theme";
 import { useTheme } from "../theme/ThemeProvider";
@@ -17,16 +21,17 @@ import SeletorDeDias from "./SeletorDeDias";
 
 type MontarSemanaProps = {
   agenda: Agenda;
+  /** Compromissos "só neste dia" do mês exibido, já em ordem */
+  avulsos: readonly Avulso[];
   aoAbrir: (compromisso: Compromisso) => void;
+  aoAbrirAvulso: (avulso: Avulso) => void;
   aoNovo: () => void;
 };
 
 type ErroDeLinha = { compromissoId: string; texto: string };
 
-function horarioDe(compromisso: Compromisso): string {
-  return compromisso.fim === null
-    ? compromisso.inicio
-    : `${compromisso.inicio} a ${compromisso.fim}`;
+function horarioDe(horario: { inicio: string; fim: string | null }): string {
+  return horario.fim === null ? horario.inicio : `${horario.inicio} a ${horario.fim}`;
 }
 
 /**
@@ -34,7 +39,13 @@ function horarioDe(compromisso: Compromisso): string {
  * desliga na hora, sem abrir formulário. Numa agenda já em curso a mudança vale a partir de hoje,
  * para não reescrever os dias que passaram.
  */
-export default function MontarSemana({ agenda, aoAbrir, aoNovo }: MontarSemanaProps) {
+export default function MontarSemana({
+  agenda,
+  avulsos,
+  aoAbrir,
+  aoAbrirAvulso,
+  aoNovo,
+}: MontarSemanaProps) {
   const { dados, relogio, salvarCompromisso } = useAgenda();
   const { colors } = useTheme();
   const [erro, setErro] = useState<ErroDeLinha | null>(null);
@@ -44,6 +55,7 @@ export default function MontarSemana({ agenda, aoAbrir, aoNovo }: MontarSemanaPr
     () => new Map(dados.atividades.map((atividade) => [atividade.id, atividade])),
     [dados.atividades],
   );
+  const conflitos = useMemo(() => compromissosEmConflito(agenda.compromissos), [agenda.compromissos]);
   const ordenados = useMemo(
     () =>
       [...agenda.compromissos].sort(
@@ -85,11 +97,12 @@ export default function MontarSemana({ agenda, aoAbrir, aoNovo }: MontarSemanaPr
           const atividade = atividades.get(compromisso.atividadeId);
           const nome = atividade?.nome ?? "Atividade removida";
           const horario = horarioDe(compromisso);
+          const emConflito = conflitos.has(compromisso.id);
           return (
             <Card key={compromisso.id} style={styles.cartao}>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`Editar ${nome}, ${horario}`}
+                accessibilityLabel={`Editar ${nome}, ${horario}${emConflito ? ", conflito de horário" : ""}`}
                 onPress={() => aoAbrir(compromisso)}
                 style={styles.topo}
               >
@@ -104,6 +117,11 @@ export default function MontarSemana({ agenda, aoAbrir, aoNovo }: MontarSemanaPr
                     {horario}
                     {compromisso.detalhe ? `  ·  ${compromisso.detalhe}` : ""}
                   </Text>
+                  {emConflito ? (
+                    <Text variant="caption" color="accentText" weight={600}>
+                      Conflito de horário
+                    </Text>
+                  ) : null}
                 </View>
                 <Icon name="proximo" color={colors.mute} size={18} />
               </Pressable>
@@ -122,6 +140,40 @@ export default function MontarSemana({ agenda, aoAbrir, aoNovo }: MontarSemanaPr
       )}
 
       <BotaoAcao titulo="Novo compromisso" aoPressionar={aoNovo} />
+
+      {avulsos.length > 0 ? (
+        <View style={styles.avulsos}>
+          <Text variant="section" accessibilityRole="header">
+            Só em um dia
+          </Text>
+          {avulsos.map((avulso) => {
+            const nome = atividades.get(avulso.atividadeId)?.nome ?? "Atividade removida";
+            const data = dataDaChave(avulso.data);
+            const dia = data ? formatarDataCabecalho(data) : avulso.data;
+            const horario = horarioDe(avulso);
+            return (
+              <Card key={avulso.id}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`${nome}, ${horario}, ${dia}, só neste dia`}
+                  onPress={() => aoAbrirAvulso(avulso)}
+                  style={styles.topo}
+                >
+                  <View style={styles.texto}>
+                    <Text variant="body" numberOfLines={1}>
+                      {nome}
+                    </Text>
+                    <Text variant="support" color="mute">
+                      {`${dia}  ·  ${horario}`}
+                    </Text>
+                  </View>
+                  <Icon name="proximo" color={colors.mute} size={18} />
+                </Pressable>
+              </Card>
+            );
+          })}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -130,6 +182,7 @@ const styles = StyleSheet.create({
   lista: { gap: SPACING.gap },
   cartao: { gap: SPACING.md },
   vazio: { gap: SPACING.sm },
+  avulsos: { gap: SPACING.gap, marginTop: SPACING.sm },
   topo: {
     flexDirection: "row",
     alignItems: "center",
