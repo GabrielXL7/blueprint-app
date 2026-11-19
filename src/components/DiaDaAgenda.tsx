@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { chavesEmConflito, type Ocorrencia } from "../domain/agenda";
 import { DIAS_ABREVIADOS, DIAS_DA_SEMANA, chaveDoDia } from "../domain/datas";
-import { RADIUS, SIZES, SPACING } from "../styles/theme";
+import { BRAND, RADIUS, SIZES, SPACING } from "../styles/theme";
 import { useTheme } from "../theme/ThemeProvider";
 import { Card } from "../ui/Card";
 import { Text } from "../ui/Text";
@@ -44,8 +44,8 @@ export default function DiaDaAgenda({
           {titulo}
         </Text>
         {ehHoje ? (
-          <View style={[styles.selo, { backgroundColor: colors.sunk }]}>
-            <Text variant="caption" weight={600}>
+          <View style={[styles.selo, { backgroundColor: colors.accent }]}>
+            <Text variant="caption" weight={600} style={{ color: BRAND.black }}>
               Hoje
             </Text>
           </View>
@@ -74,7 +74,7 @@ export default function DiaDaAgenda({
         accessibilityRole="button"
         accessibilityLabel={`Adicionar em ${DIAS_DA_SEMANA[data.getDay()]}`}
         onPress={aoAdicionar}
-        style={styles.adicionar}
+        style={[styles.adicionar, { borderTopColor: colors.hair }]}
       >
         <Text variant="support" color="accentText" weight={600}>
           + Adicionar
@@ -92,5 +92,10 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.xs,
     borderRadius: RADIUS.pill,
   },
-  adicionar: { minHeight: SIZES.touchMin, justifyContent: "center" },
+  adicionar: {
+    minHeight: SIZES.touchMin,
+    justifyContent: "center",
+    borderTopWidth: 1,
+    marginTop: SPACING.xs,
+  },
 });
