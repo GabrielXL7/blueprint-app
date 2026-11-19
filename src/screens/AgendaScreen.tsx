@@ -3,12 +3,15 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import DiaDaAgenda from "../components/DiaDaAgenda";
+import MontarSemana from "../components/MontarSemana";
 import { gerarAgendaDeExemplo } from "../dev/agendaDeExemplo";
 import { gerarIdLocal } from "../domain/acoes";
 import {
   DADOS_AGENDA_VAZIOS,
   nomeDeAgendaDoMes,
   periodoLivreDoMes,
+  type Agenda,
+  type Compromisso,
   type Ocorrencia,
 } from "../domain/agenda";
 import {
@@ -23,8 +26,10 @@ import { useAgenda } from "../hooks/useAgenda";
 import type { RaizParamList } from "../navigation/Raiz";
 import { RADIUS, SIZES, SPACING } from "../styles/theme";
 import { useTheme } from "../theme/ThemeProvider";
-import { Card, Screen, Text } from "../ui";
+import { Card, Screen, SegmentedControl, Text } from "../ui";
 import { Icon } from "../ui/Icon";
+
+type Modo = "dias" | "semana";
 
 function FerramentasDeDesenvolvimento() {
   const { substituir, relogio } = useAgenda();
@@ -60,18 +65,33 @@ function FerramentasDeDesenvolvimento() {
   );
 }
 
-/** Aba Agenda: uma semana por vez, de domingo a sábado (docs/superpowers/specs, seção 7.1). */
+/**
+ * Aba Agenda: uma semana por vez, de domingo a sábado (docs/superpowers/specs, seção 7.1).
+ * "Por dia" mostra cada dia com seus compromissos; "Montar semana" mostra um compromisso por
+ * linha com os dias ao lado, o jeito mais rápido de montar o cronograma do mês.
+ */
 export default function AgendaScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RaizParamList>>();
   const { dados, relogio, ocorrenciasDe, agendaDe, criarAgenda } = useAgenda();
   const { colors } = useTheme();
   const [deslocamento, setDeslocamento] = useState(0);
   const [erro, setErro] = useState<string | null>(null);
+  const [modo, setModo] = useState<Modo>("dias");
 
   const hoje = relogio();
   const domingo = somarDias(inicioDaSemana(hoje), 7 * deslocamento);
   const dias = diasDaSemana(domingo);
   const nomeNoCabecalho = dias.map(agendaDe).find((agenda) => agenda !== undefined)?.nome;
+
+  // Agenda que a semana modelo edita: a que contém hoje; senão a última da semana exibida.
+  const chaveHoje = chaveDoDia(hoje);
+  const agendasDaSemana = dias
+    .map(agendaDe)
+    .filter((agenda): agenda is Agenda => agenda !== undefined)
+    .filter((agenda, indice, todas) => todas.findIndex((outra) => outra.id === agenda.id) === indice);
+  const agendaAlvo =
+    agendasDaSemana.find((agenda) => agenda.inicio <= chaveHoje && chaveHoje <= agenda.fim) ??
+    agendasDaSemana[agendasDaSemana.length - 1];
 
   function abrir(ocorrencia: Ocorrencia) {
     if (ocorrencia.origem === "avulso") {
@@ -121,6 +141,16 @@ export default function AgendaScreen() {
         </Pressable>
       </View>
 
+      <SegmentedControl<Modo>
+        accessibilityLabel="Modo da agenda"
+        value={modo}
+        onChange={setModo}
+        options={[
+          { value: "dias", label: "Por dia" },
+          { value: "semana", label: "Montar semana" },
+        ]}
+      />
+
       <View style={styles.semana}>
         <Pressable
           accessibilityRole="button"
@@ -169,22 +199,40 @@ export default function AgendaScreen() {
         </Card>
       ) : null}
 
-      {dias.map((dia) => {
-        const agenda = agendaDe(dia);
-        const anterior = agendaDe(somarDias(dia, -1));
-        const mudou = agenda !== undefined && agenda.id !== anterior?.id;
-        return (
-          <DiaDaAgenda
-            key={chaveDoDia(dia)}
-            data={dia}
-            hoje={hoje}
-            ocorrencias={ocorrenciasDe(dia)}
-            nomeDaAgenda={mudou && agenda.nome !== nomeNoCabecalho ? agenda.nome : undefined}
-            aoAdicionar={() => navigation.navigate("Compromisso", { data: chaveDoDia(dia) })}
-            aoAbrir={abrir}
+      {modo === "semana" ? (
+        agendaAlvo ? (
+          <MontarSemana
+            key={agendaAlvo.id}
+            agenda={agendaAlvo}
+            aoAbrir={(compromisso: Compromisso) =>
+              navigation.navigate("Compromisso", {
+                compromissoId: compromisso.id,
+                agendaId: agendaAlvo.id,
+              })
+            }
+            aoNovo={() =>
+              navigation.navigate("Compromisso", { data: agendaAlvo.inicio, modelo: true })
+            }
           />
-        );
-      })}
+        ) : null
+      ) : (
+        dias.map((dia) => {
+          const agenda = agendaDe(dia);
+          const anterior = agendaDe(somarDias(dia, -1));
+          const mudou = agenda !== undefined && agenda.id !== anterior?.id;
+          return (
+            <DiaDaAgenda
+              key={chaveDoDia(dia)}
+              data={dia}
+              hoje={hoje}
+              ocorrencias={ocorrenciasDe(dia)}
+              nomeDaAgenda={mudou && agenda.nome !== nomeNoCabecalho ? agenda.nome : undefined}
+              aoAdicionar={() => navigation.navigate("Compromisso", { data: chaveDoDia(dia) })}
+              aoAbrir={abrir}
+            />
+          );
+        })
+      )}
       <FerramentasDeDesenvolvimento />
     </Screen>
   );

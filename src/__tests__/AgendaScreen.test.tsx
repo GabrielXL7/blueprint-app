@@ -242,3 +242,94 @@ describe("Raiz e barra de abas", () => {
     expect(screen.getByText("11 a 17 de outubro")).toBeTruthy();
   });
 });
+
+describe("AgendaScreen: montar semana", () => {
+  async function abrirSemana(agendas: Agenda[] = [OUTUBRO]) {
+    await renderComTema(<ComPilha />, { agenda: dados(agendas) });
+    await fireEvent.press(screen.getByText("Montar semana"));
+  }
+
+  function diaDaLinha(linha: number, nome: string) {
+    return screen.getAllByRole("checkbox", { name: nome })[linha];
+  }
+
+  it("mostra um compromisso por linha, com os sete dias ao lado", async () => {
+    await abrirSemana();
+
+    expect(screen.getAllByText("Academia")).toHaveLength(1);
+    expect(screen.getAllByText("Culto")).toHaveLength(1);
+    expect(screen.getByText("05:00 a 06:00")).toBeTruthy();
+    expect(screen.getAllByRole("checkbox", { name: "Segunda-feira" })).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: /^Adicionar em / })).toBeNull();
+    expect(diaDaLinha(0, "Quarta-feira").props.accessibilityState).toMatchObject({ checked: true });
+    expect(diaDaLinha(0, "Sábado").props.accessibilityState).toMatchObject({ checked: false });
+  });
+
+  it("marca um dia com um toque e vale só de hoje em diante numa agenda em curso", async () => {
+    await abrirSemana();
+    expect(screen.getByText(/já começou/)).toBeTruthy();
+
+    await fireEvent.press(diaDaLinha(0, "Sábado"));
+    expect(diaDaLinha(0, "Sábado").props.accessibilityState).toMatchObject({ checked: true });
+
+    // Hoje é sábado 17: a academia passa a aparecer neste sábado e em nenhum dia que já passou.
+    await fireEvent.press(screen.getByText("Por dia"));
+    expect(screen.getAllByText("Academia")).toHaveLength(6);
+    await fireEvent.press(screen.getByRole("button", { name: "Semana anterior" }));
+    expect(screen.getAllByText("Academia")).toHaveLength(5);
+  });
+
+  it("numa agenda que ainda não começou, vale para o mês inteiro sem dividir", async () => {
+    const novembro = agenda("nov", "Novembro de 2026", "2026-11-01", "2026-11-30");
+    await renderComTema(<ComPilha />, { agenda: dados([novembro]) });
+    await avancarSemanas(3);
+    await fireEvent.press(screen.getByText("Montar semana"));
+
+    expect(screen.getByText(/Vale para todas as semanas desta agenda/)).toBeTruthy();
+    await fireEvent.press(diaDaLinha(0, "Domingo"));
+    expect(diaDaLinha(0, "Domingo").props.accessibilityState).toMatchObject({ checked: true });
+    expect(screen.getAllByText("Novembro de 2026")).toHaveLength(1);
+  });
+
+  it("não deixa um compromisso ficar sem nenhum dia", async () => {
+    await abrirSemana();
+
+    await fireEvent.press(diaDaLinha(1, "Domingo"));
+    expect(screen.getByRole("alert")).toHaveTextContent("Escolha pelo menos um dia");
+    expect(diaDaLinha(1, "Domingo").props.accessibilityState).toMatchObject({ checked: true });
+  });
+
+  it("abre o compromisso para editar horário e detalhes", async () => {
+    await abrirSemana();
+
+    await fireEvent.press(screen.getByRole("button", { name: "Editar Academia, 05:00 a 06:00" }));
+    expect(JSON.parse(String(screen.getByTestId("parametros").props.children))).toEqual({
+      compromissoId: "out-academia",
+      agendaId: "out",
+    });
+  });
+
+  it("cria um compromisso novo sem dia pré-marcado, no início da agenda", async () => {
+    await abrirSemana();
+
+    await fireEvent.press(screen.getByRole("button", { name: "Novo compromisso" }));
+    expect(JSON.parse(String(screen.getByTestId("parametros").props.children))).toEqual({
+      data: "2026-10-01",
+      modelo: true,
+    });
+  });
+
+  it("explica o estado vazio de uma agenda sem compromissos", async () => {
+    await abrirSemana([{ ...OUTUBRO, compromissos: [] }]);
+
+    expect(screen.getByText("Nenhum compromisso ainda")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Novo compromisso" })).toBeTruthy();
+  });
+
+  it("sem agenda na semana, mantém o convite para montar a agenda", async () => {
+    await abrirSemana([]);
+
+    expect(screen.getByText("Montar a agenda de outubro")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Novo compromisso" })).toBeNull();
+  });
+});

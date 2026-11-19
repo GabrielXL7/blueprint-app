@@ -243,3 +243,31 @@ describe("SeletorDeHorario", () => {
     expect(aoMudar).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("SeletorDeDias: atalhos", () => {
+  it("não mostra atalhos por padrão", async () => {
+    await renderComTema(<SeletorDeDias valor={[]} aoMudar={() => {}} />);
+    expect(screen.queryByRole("button", { name: "Seg a sex" })).toBeNull();
+  });
+
+  it.each([
+    ["Seg a sex", [1, 2, 3, 4, 5]],
+    ["Fim de semana", [0, 6]],
+    ["Todos os dias", [0, 1, 2, 3, 4, 5, 6]],
+  ] satisfies [string, DiaDaSemana[]][])("o atalho %s marca os dias certos", async (nome, dias) => {
+    const aoMudar = jest.fn();
+    await renderComTema(<SeletorDeDias valor={[3]} aoMudar={aoMudar} atalhos />);
+
+    await fireEvent.press(screen.getByRole("button", { name: nome }));
+    expect(aoMudar).toHaveBeenLastCalledWith(dias);
+  });
+
+  it("destaca o atalho que corresponde à seleção atual", async () => {
+    await renderComTema(<SeletorDeDias valor={[1, 2, 3, 4, 5]} aoMudar={() => {}} atalhos />);
+
+    const ativo = screen.getByRole("button", { name: "Seg a sex" });
+    const outro = screen.getByRole("button", { name: "Fim de semana" });
+    expect(ativo.props.accessibilityState).toMatchObject({ selected: true });
+    expect(outro.props.accessibilityState).toMatchObject({ selected: false });
+  });
+});

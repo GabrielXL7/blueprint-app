@@ -98,3 +98,12 @@ Para rodar a página: abrir `landing/index.html` no navegador, ou servir a pasta
 - Etapa 2 do roteiro: "Hoje" mostrar os compromissos da agenda com "Feito" e "Não fui". Hoje a tela inicial ainda é a de hábitos.
 - Alertas, painel de histórico por mês, Supabase e o `.apk`.
 - Preço e link real de download: não existem no projeto, então a página usa um único ponto de configuração para o link.
+
+## 6. Montar semana (cronograma mais rápido)
+
+Problema: montar a semana exigia abrir o mesmo formulário comprido uma vez por dia, embora o dado já aceite vários dias por compromisso.
+
+- **Agenda, modo "Montar semana":** uma linha por compromisso, ordenada por horário, com os sete dias ao lado. Um toque liga ou desliga o dia, sem formulário. Tocar no nome abre o compromisso para editar horário e detalhes.
+- **Agenda em curso:** a mudança vale a partir de hoje (a agenda é dividida), para não reescrever os dias que já passaram. Em agenda que ainda não começou, vale para todas as semanas.
+- **Formulário:** atalhos "Seg a sex", "Fim de semana" e "Todos os dias". Vindo da semana modelo, o formulário abre sem dia pré-marcado.
+- **Fora desta entrega:** duplicar um compromisso (por exemplo, a mesma aula em dois horários) e arrastar para mudar de dia.
