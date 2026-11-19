@@ -115,3 +115,11 @@ Problema: a lista mostrava cada ação de cada dia (mais de cem linhas) e a vis�
 
 - **Semana:** gráfico e números como antes, mais "Dia a dia": uma linha por dia da semana exibida, com os ícones das categorias e o total. Tocar abre as ações do dia; hoje já vem aberto. Dias futuros não aparecem.
 - **Mês:** ações no mês e dias com registro, e "Por categoria" com barra proporcional e a comparação com o mês anterior ("2 a mais que no mês anterior"). Responde "quantas vezes fui à academia neste mês".
+
+## 8. Perfil
+
+- **Nome:** editável no próprio cartão ("Adicionar seu nome" / "Editar nome"), de 1 a 40 caracteres, com espaços normalizados. Enquanto não houver nome, aparece "Convidado".
+- **Foto:** escolhida da galeria com recorte quadrado (`expo-image-picker`) e reduzida para 512 px em JPEG (`expo-image-manipulator`). Sem essa redução, uma foto de celular passaria de 1 MB e estouraria o limite do AsyncStorage no Android. Fica guardada como data URI de até 300 mil caracteres. Sem foto, aparecem as iniciais sobre o gradiente.
+- **Armazenamento:** `PerfilRepository` local (`blueprint:perfil`), no mesmo padrão da agenda, com `PerfilProvider` e `usePerfil`. Ao ligar a conta na nuvem, a foto deve migrar para um bucket do Supabase Storage em vez de ir dentro da linha do banco.
+- **Visual:** cartão de identidade centralizado, e as configurações agrupadas em cartões ("Aparência" e "Sobre").
+- **Ainda não exercitado em aparelho real:** o seletor de fotos foi testado com simulação e a edição do nome foi conferida no navegador. Escolher e recortar uma foto de verdade precisa ser testado no celular (Expo Go ou build).
