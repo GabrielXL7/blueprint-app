@@ -403,8 +403,8 @@ describe("CompromissoScreen: vindo da semana modelo", () => {
         checked: true,
       });
     }
-    expect(screen.getByRole("checkbox", { name: "Domingo" }).props.accessibilityState).toMatchObject(
-      { checked: false },
-    );
+    expect(
+      screen.getByRole("checkbox", { name: "Domingo" }).props.accessibilityState,
+    ).toMatchObject({ checked: false });
   });
 });

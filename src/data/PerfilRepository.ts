@@ -20,7 +20,9 @@ export function normalizarPerfil(bruto: unknown): Perfil {
   return { nome, foto: fotoValida(p.foto) ? p.foto : null };
 }
 
-export function criarPerfilRepositoryLocal(armazenamento: ArmazenamentoChaveValor): PerfilRepository {
+export function criarPerfilRepositoryLocal(
+  armazenamento: ArmazenamentoChaveValor,
+): PerfilRepository {
   const enfileirar = criarFilaDeGravacao();
   return {
     async carregar() {

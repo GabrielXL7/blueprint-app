@@ -66,7 +66,9 @@ function SeletorDeDestaque() {
             onPress={() => setDestaque(valor)}
             style={[
               styles.amostra,
-              ativo && { boxShadow: `0px 0px 0px 3px ${colors.card}, 0px 0px 0px 5px ${colors.ink}` },
+              ativo && {
+                boxShadow: `0px 0px 0px 3px ${colors.card}, 0px 0px 0px 5px ${colors.ink}`,
+              },
             ]}
           >
             <View style={styles.amostraInterna}>
@@ -145,7 +147,11 @@ export default function PerfilScreen() {
               onPress={trocarFoto}
               style={[
                 styles.camera,
-                { backgroundColor: colors.accent, borderColor: colors.card, opacity: ocupado ? 0.6 : 1 },
+                {
+                  backgroundColor: colors.accent,
+                  borderColor: colors.card,
+                  opacity: ocupado ? 0.6 : 1,
+                },
               ]}
             >
               <Icon name="camera" color={BRAND.black} size={18} strokeWidth={2.2} />

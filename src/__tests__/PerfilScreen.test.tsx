@@ -115,9 +115,7 @@ describe("PerfilScreen: foto", () => {
     await renderComTema(<PerfilScreen />);
 
     await fireEvent.press(screen.getByRole("button", { name: "Adicionar foto" }));
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(/pesada demais/),
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/pesada demais/));
     expect(screen.getByLabelText("Avatar de Convidado")).toBeTruthy();
   });
 

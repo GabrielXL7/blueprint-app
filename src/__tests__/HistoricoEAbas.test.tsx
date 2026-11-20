@@ -140,9 +140,7 @@ describe("HistoricoScreen: mês", () => {
     expect(screen.getByText("outubro de 2026")).toBeTruthy();
     expect(screen.getByLabelText("4 ações no mês")).toBeTruthy();
     expect(screen.getByLabelText("4 dias com registro")).toBeTruthy();
-    expect(
-      screen.getByLabelText("Exercício, 3 vezes, 2 a mais que no mês anterior"),
-    ).toBeTruthy();
+    expect(screen.getByLabelText("Exercício, 3 vezes, 2 a mais que no mês anterior")).toBeTruthy();
     expect(screen.getByLabelText("Estudo, 1 vez, 1 a mais que no mês anterior")).toBeTruthy();
   });
 
@@ -157,9 +155,7 @@ describe("HistoricoScreen: mês", () => {
       em("estudo", 8, 4),
     ]);
 
-    expect(
-      screen.getByLabelText("Exercício, 2 vezes, 1 a menos que no mês anterior"),
-    ).toBeTruthy();
+    expect(screen.getByLabelText("Exercício, 2 vezes, 1 a menos que no mês anterior")).toBeTruthy();
     expect(screen.getByLabelText("Estudo, 1 vez, igual ao mês anterior")).toBeTruthy();
   });
 

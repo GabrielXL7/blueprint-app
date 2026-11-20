@@ -55,7 +55,10 @@ export default function MontarSemana({
     () => new Map(dados.atividades.map((atividade) => [atividade.id, atividade])),
     [dados.atividades],
   );
-  const conflitos = useMemo(() => compromissosEmConflito(agenda.compromissos), [agenda.compromissos]);
+  const conflitos = useMemo(
+    () => compromissosEmConflito(agenda.compromissos),
+    [agenda.compromissos],
+  );
   const ordenados = useMemo(
     () =>
       [...agenda.compromissos].sort(

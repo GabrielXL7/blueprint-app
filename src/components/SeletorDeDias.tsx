@@ -51,10 +51,7 @@ export default function SeletorDeDias({ valor, aoMudar, atalhos = false }: Selet
                 accessibilityLabel={atalho.rotulo}
                 accessibilityState={{ selected: ativo }}
                 onPress={() => aoMudar([...atalho.dias])}
-                style={[
-                  styles.atalho,
-                  { backgroundColor: ativo ? colors.ink : colors.sunk },
-                ]}
+                style={[styles.atalho, { backgroundColor: ativo ? colors.ink : colors.sunk }]}
               >
                 <Text variant="caption" weight={600} color={ativo ? "onInk" : "ink"}>
                   {atalho.rotulo}
